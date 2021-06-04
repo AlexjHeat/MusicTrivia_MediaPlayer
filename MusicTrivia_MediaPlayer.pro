@@ -16,14 +16,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    displaywindow.cpp \
     main.cpp \
     controlwindow.cpp
 
 HEADERS += \
-    controlwindow.h
+    controlwindow.h \
+    displaywindow.h
 
 FORMS += \
-    controlwindow.ui
+    controlwindow.ui \
+    displaywindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
