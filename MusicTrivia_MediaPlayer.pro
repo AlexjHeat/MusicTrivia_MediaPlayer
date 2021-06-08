@@ -18,11 +18,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     displaywindow.cpp \
     main.cpp \
-    controlwindow.cpp
+    controlwindow.cpp \
+    playlist.cpp \
+    song.cpp
 
 HEADERS += \
     controlwindow.h \
-    displaywindow.h
+    displaywindow.h \
+    playlist.h \
+    song.h
 
 FORMS += \
     controlwindow.ui \
