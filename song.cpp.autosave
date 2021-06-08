@@ -1,0 +1,12 @@
+#include "song.h"
+
+
+QString Song::getPath() { return path; }
+QString Song::getTitle() { return title; }
+QString Song::getArtist(){ return artist; }
+int Song::getStartTime() { return startTime; }
+
+void Song::setPath(QString path) { this->path = path; }
+void Song::setTitle(QString title) { this->title = title; }
+void Song::setArtist(QString artist) { this->artist = artist; }
+void Song::setStartTime(int startTime) { this->startTime = startTime; }
