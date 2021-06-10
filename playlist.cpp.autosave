@@ -4,6 +4,7 @@ Playlist::Playlist(QString name)
 {
     this->name = name;
     n = 0;
+    changed = true;
 }
 
 

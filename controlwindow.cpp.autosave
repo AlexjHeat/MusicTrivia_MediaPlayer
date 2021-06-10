@@ -53,7 +53,6 @@ void ControlWindow::on_actionCreate_triggered()
     if (!ok) { return; }
 
     active = new Playlist(nameInput);
-    active->save();
 
 }
 
