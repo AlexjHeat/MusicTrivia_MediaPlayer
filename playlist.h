@@ -21,9 +21,11 @@ public:
 
     void add(Song);
     void remove(int);
+    void sort();
 
     void save();
     void load(QFile&);
+
 
 
 private:

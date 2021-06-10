@@ -1,26 +1,60 @@
 #include "playlist.h"
 
+void swap(Song* a, Song* b)
+{
+    Song temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition (Song arr[], int low, int high)
+{
+    int mid = (low + high) / 2 + low;
+    Song pivot = arr[mid];
+    swap(&arr[mid], &arr[high]);
+    int i = low - 1;
+    for(int j = low; j <= high - 1; j++)
+    {
+        if(arr[j] < pivot)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+
+    }
+    swap(&arr[i + 1], &arr[high]);
+        return (i + 1);
+}
+
+void quickSort(Song arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition(arr, low, high);
+        quickSort(arr, low, pivot - 1);
+        quickSort(arr, pivot + 1, high);
+    }
+}
+
+
 Playlist::Playlist(QString name)
 {
     this->name = name;
     n = 0;
+    changed = true;
 }
 
 
 QString Playlist::getName() { return name; }
 void Playlist::setName(QString name) { this->name = name; }
-
-
 bool Playlist::getChanged(){ return changed; }
 void Playlist::setChanged(bool changed){ this->changed = changed; }
-
 
 void Playlist::add(Song s)
 {
     list[n] = s;
     n++;
 }
-
 
 void Playlist::remove(int j)
 {
@@ -31,6 +65,12 @@ void Playlist::remove(int j)
     }
 }
 
+void Playlist::sort()
+{
+    int low = 0;
+    int high = n - 1;
+    quickSort(list, low, high);
+}
 
 void Playlist::save()
 {
@@ -49,8 +89,8 @@ void Playlist::save()
     }
     file.flush();
     file.close();
+    changed = false;
 }
-
 
 void Playlist::load(QFile &file)
 {

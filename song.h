@@ -15,6 +15,12 @@ public:
     void setTitle(QString);
     void setArtist(QString);
     void setStartTime(int);
+
+    bool operator<(const Song&);
+    bool operator>(const Song&);
+    bool operator==(const Song&);
+    Song& operator=(const Song&);
+
 private:
     QString path;
     QString title;
