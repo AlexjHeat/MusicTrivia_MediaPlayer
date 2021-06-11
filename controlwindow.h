@@ -2,6 +2,11 @@
 #define CONTROLWINDOW_H
 
 #include <QMainWindow>
+#include <QStringListModel>
+#include <QString>
+#include <QInputDialog>
+#include <QMessageBox>
+
 #include "playlist.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,19 +23,16 @@ public:
 
 private slots:
     void on_actionLoad_triggered();
-
     void on_actionSave_triggered();
-
     void on_actionCreate_triggered();
-
     void on_actionAdd_triggered();
-
     void on_actionAdd_Folder_triggered();
-
     void on_actionRemove_triggered();
+    void on_actionSort_triggered();
 
 private:
     Ui::ControlWindow *ui;
     Playlist *active;
+    QStringListModel* listModel;
 };
 #endif // CONTROLWINDOW_H

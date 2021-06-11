@@ -14,7 +14,7 @@
    <string>ControlWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListView" name="listView">
+   <widget class="QListView" name="playlistView">
     <property name="geometry">
      <rect>
       <x>175</x>
@@ -44,6 +44,7 @@
     <addaction name="actionAdd"/>
     <addaction name="actionAdd_Folder"/>
     <addaction name="actionRemove"/>
+    <addaction name="actionSort"/>
    </widget>
    <addaction name="menuPlaylist"/>
   </widget>
@@ -76,6 +77,11 @@
   <action name="actionRemove">
    <property name="text">
     <string>Remove</string>
+   </property>
+  </action>
+  <action name="actionSort">
+   <property name="text">
+    <string>Sort</string>
    </property>
   </action>
  </widget>

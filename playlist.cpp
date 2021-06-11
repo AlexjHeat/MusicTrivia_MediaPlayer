@@ -36,6 +36,11 @@ void quickSort(Song arr[], int low, int high)
     }
 }
 
+Playlist::Playlist()
+{
+    n = 0;
+    changed = false;
+}
 
 Playlist::Playlist(QString name)
 {
@@ -50,10 +55,13 @@ void Playlist::setName(QString name) { this->name = name; }
 bool Playlist::getChanged(){ return changed; }
 void Playlist::setChanged(bool changed){ this->changed = changed; }
 
-void Playlist::add(Song s)
+void Playlist::add(QString fileName)
 {
-    list[n] = s;
-    n++;
+    if(!fileName.isEmpty()) {
+        list[n].setPath(fileName);
+        n++;
+        changed = true;
+    }
 }
 
 void Playlist::remove(int j)
@@ -105,4 +113,24 @@ void Playlist::load(QFile &file)
         in >> list[i];
         in.readLine();
     }
+}
+
+QStringList Playlist::getList()
+{
+    QStringList result;
+    for(int i = 0; i < n; i++)
+    {
+        if(!list[i].getArtist().isEmpty())
+        {
+            if(!list[i].getTitle().isEmpty())
+                result << list[i].getArtist() + " - " + list[i].getTitle();
+            else
+                result << list[i].getArtist();
+        }
+        else
+        {
+            result << list[i].getPath();
+        }
+    }
+    return result;
 }

@@ -11,6 +11,7 @@
 const int MAX_SIZE = 500;
 class Playlist{
 public:
+    Playlist();
     Playlist(QString);
 
     QString getName();
@@ -19,12 +20,13 @@ public:
     bool getChanged();
     void setChanged(bool);
 
-    void add(Song);
+    void add(QString);
     void remove(int);
     void sort();
 
     void save();
     void load(QFile&);
+    QStringList getList();
 
 
 
