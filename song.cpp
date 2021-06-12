@@ -1,5 +1,10 @@
 #include "song.h"
+#include <QMessageBox>
 
+Song::Song()
+{
+    startTime = 0;
+}
 
 QString Song::getPath() const { return path; }
 QString Song::getTitle() const { return title; }

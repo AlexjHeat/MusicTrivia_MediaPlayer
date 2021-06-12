@@ -15,9 +15,8 @@ public:
     Playlist(QString);
 
     QString getName();
-    void setName(QString);
-
     bool getChanged();
+    void setName(QString);
     void setChanged(bool);
 
     void add(QString);
@@ -27,6 +26,7 @@ public:
     void save();
     void load(QFile&);
     QStringList getList();
+    Song& getSong(int);
 
 
 

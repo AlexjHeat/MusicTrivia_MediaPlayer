@@ -10,19 +10,26 @@ ControlWindow::ControlWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ControlWindow)
     , active(NULL)
+    , i(0)
 {
     ui->setupUi(this);
 
     listModel = new QStringListModel(this);
-    ui->playlistView->setDragDropMode(QAbstractItemView::DragDrop);
-    ui->playlistView->setEditTriggers(QAbstractItemView::CurrentChanged);
+    ui->playlistView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->playlistView->setAlternatingRowColors(true);
+    ui->playlistView->setSelectionRectVisible(true);
+
+    connect(ui->playlistView, SIGNAL(clicked(QModelIndex)), this, SLOT(displaySongData(QModelIndex)));
+    connect(ui->lineEditArtist, SIGNAL(textEdited(QString)), this, SLOT(updateArtist(QString)));
+    connect(ui->lineEditTitle, SIGNAL(textEdited(QString)), this, SLOT(updateTitle(QString)));
+    connect(ui->lineEditStartTime, SIGNAL(textEdited(QString)), this, SLOT(updateStartTime(QString)));
+    //Above connection needs to somehow know the index of the song that's being edited
 }
 
 ControlWindow::~ControlWindow()
 {
     delete ui;
 }
-
 
 void ControlWindow::on_actionLoad_triggered()
 {
@@ -94,28 +101,31 @@ void ControlWindow::on_actionCreate_triggered()
 void ControlWindow::on_actionAdd_triggered()
 {
     if(active == NULL)
+     {
+         QMessageBox::warning(this, "Error", "No active playlist");
+         return;
+     }
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select a file", "C:\\Users\\Owner\\Music");
+    for(int i = 0; i < fileNames.size(); i++)
     {
-        QMessageBox::warning(this, "Error", "No active playlist");
-        return;
+        active->add(fileNames[i]);
     }
-    QString fileName = QFileDialog::getOpenFileName(this, "Select a file", "C:\\Users\\Owner\\Music");
-    if(!fileName.isEmpty())
-    {
-        active->add(fileName);
-        //Need to update the listmodel
-    }
-}
-
-
-void ControlWindow::on_actionAdd_Folder_triggered()
-{
+    listModel->setStringList(active->getList());
+    ui->playlistView->setModel(listModel);
 
 }
 
 
 void ControlWindow::on_actionRemove_triggered()
 {
-
+    if(active == NULL)
+     {
+         QMessageBox::warning(this, "Error", "No active playlist");
+         return;
+     }
+    active->remove(i);
+    listModel->setStringList(active->getList());
+    ui->playlistView->setModel(listModel);
 }
 
 void ControlWindow::on_actionSort_triggered()
@@ -129,3 +139,49 @@ void ControlWindow::on_actionSort_triggered()
     listModel->setStringList(active->getList());
     ui->playlistView->setModel(listModel);
 }
+
+void ControlWindow::on_actionRename_triggered()
+{
+    bool ok;
+    QString nameInput = QInputDialog::getText(this, "Rename playlist", "Enter a new name for the playlist", QLineEdit::Normal, active->getName(), &ok);
+    if (!ok)
+        return;
+    active->setName(nameInput);
+}
+
+void ControlWindow::displaySongData(QModelIndex t)
+{
+    i = t.row();
+    Song current = active->getSong(i);
+    ui->lineEditArtist->setText(current.getArtist());
+    ui->lineEditTitle->setText(current.getTitle());
+    ui->lineEditStartTime->setText(QString::number(current.getStartTime()));
+}
+
+void ControlWindow::updateArtist(QString artist)
+{
+    active->getSong(i).setArtist(artist);
+    listModel->setStringList(active->getList());
+    ui->playlistView->setModel(listModel);
+}
+
+void ControlWindow::updateTitle(QString title)
+{
+    active->getSong(i).setTitle(title);
+    listModel->setStringList(active->getList());
+    ui->playlistView->setModel(listModel);
+}
+
+void ControlWindow::updateStartTime(QString time)
+{
+    active->getSong(i).setStartTime(time.toInt());
+    listModel->setStringList(active->getList());
+    ui->playlistView->setModel(listModel);
+}
+
+
+void ControlWindow::testFunction(QString temp)
+{
+    active->getSong(i).setArtist(temp);
+}
+

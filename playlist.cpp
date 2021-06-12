@@ -51,7 +51,7 @@ Playlist::Playlist(QString name)
 
 
 QString Playlist::getName() { return name; }
-void Playlist::setName(QString name) { this->name = name; }
+void Playlist::setName(QString name) { this->name = name; changed = true;}
 bool Playlist::getChanged(){ return changed; }
 void Playlist::setChanged(bool changed){ this->changed = changed; }
 
@@ -71,6 +71,8 @@ void Playlist::remove(int j)
     {
         list[i] = list[i+1];
     }
+    changed = true;
+
 }
 
 void Playlist::sort()
@@ -133,4 +135,9 @@ QStringList Playlist::getList()
         }
     }
     return result;
+}
+
+Song& Playlist::getSong(int i)
+{
+    return list[i];
 }

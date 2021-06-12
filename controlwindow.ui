@@ -13,16 +13,106 @@
   <property name="windowTitle">
    <string>ControlWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #e2d194;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListView" name="playlistView">
     <property name="geometry">
      <rect>
-      <x>175</x>
-      <y>131</y>
-      <width>351</width>
-      <height>251</height>
+      <x>25</x>
+      <y>31</y>
+      <width>461</width>
+      <height>421</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QListView::item {background-color: #ECE6C2;}
+QListView::item:alternate {background-color: #fafaf0;}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelActivePlaylist">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>5</y>
+      <width>211</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: open sans;
+font-size: 18px;
+font-weight: bold;</string>
+    </property>
+    <property name="text">
+     <string>Active Playlist: None</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>60</y>
+      <width>251</width>
+      <height>153</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="songEdit">
+     <item>
+      <layout class="QVBoxLayout" name="songEditLabels">
+       <item>
+        <widget class="QLabel" name="labelArtist">
+         <property name="styleSheet">
+          <string notr="true">font: open sans;
+font-size: 16px;
+font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>Song Artist</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelTitle">
+         <property name="styleSheet">
+          <string notr="true">font: open sans;
+font-size: 16px;
+font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>Song Title</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelStartTime">
+         <property name="styleSheet">
+          <string notr="true">font: open sans;
+font-size: 16px;
+font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>Start Time</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="songEditInput">
+       <item>
+        <widget class="QLineEdit" name="lineEditArtist"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditTitle"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditStartTime"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -42,8 +132,8 @@
     <addaction name="actionSave"/>
     <addaction name="actionCreate"/>
     <addaction name="actionAdd"/>
-    <addaction name="actionAdd_Folder"/>
     <addaction name="actionRemove"/>
+    <addaction name="actionRename"/>
     <addaction name="actionSort"/>
    </widget>
    <addaction name="menuPlaylist"/>
@@ -69,11 +159,6 @@
     <string>Add</string>
    </property>
   </action>
-  <action name="actionAdd_Folder">
-   <property name="text">
-    <string>Add Folder</string>
-   </property>
-  </action>
   <action name="actionRemove">
    <property name="text">
     <string>Remove</string>
@@ -82,6 +167,11 @@
   <action name="actionSort">
    <property name="text">
     <string>Sort</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
    </property>
   </action>
  </widget>

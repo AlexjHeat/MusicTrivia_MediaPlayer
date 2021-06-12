@@ -26,13 +26,23 @@ private slots:
     void on_actionSave_triggered();
     void on_actionCreate_triggered();
     void on_actionAdd_triggered();
-    void on_actionAdd_Folder_triggered();
     void on_actionRemove_triggered();
     void on_actionSort_triggered();
+    void on_actionRename_triggered();
+
+    void displaySongData(QModelIndex);
+    void updateArtist(QString);
+    void updateTitle(QString);
+    void updateStartTime(QString);
+
+    void testFunction(QString);
+
+
 
 private:
     Ui::ControlWindow *ui;
     Playlist *active;
     QStringListModel* listModel;
+    int i;
 };
 #endif // CONTROLWINDOW_H
