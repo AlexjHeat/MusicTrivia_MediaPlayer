@@ -60,7 +60,6 @@ void Playlist::add(QString fileName)
     if(!fileName.isEmpty()) {
         list[n].setPath(fileName);
         n++;
-        changed = true;
     }
 }
 
@@ -71,8 +70,6 @@ void Playlist::remove(int j)
     {
         list[i] = list[i+1];
     }
-    changed = true;
-
 }
 
 void Playlist::sort()

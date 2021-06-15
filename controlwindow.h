@@ -6,8 +6,10 @@
 #include <QString>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "playlist.h"
+#include "displaywindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ControlWindow; }
@@ -34,15 +36,23 @@ private slots:
     void updateArtist(QString);
     void updateTitle(QString);
     void updateStartTime(QString);
+    void updateGuessTime(QString);
 
-    void testFunction(QString);
-
-
+    void buttonPlay();
+    void countdown();
+    void setVolume(int);
 
 private:
     Ui::ControlWindow *ui;
+    DisplayWindow* display;
     Playlist *active;
     QStringListModel* listModel;
     int i;
+
+    QTimer* timer;
+    int guessTime;
+    bool countdownPause;
+
+    bool currentlyPlaying;
 };
 #endif // CONTROLWINDOW_H
