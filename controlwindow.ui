@@ -14,7 +14,7 @@
    <string>ControlWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #e2d194;</string>
+   <string notr="true">background-color: #F5F5DC;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListView" name="playlistView">
@@ -136,6 +136,22 @@ font-weight: bold;</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+background-color: #23395d;
+border: 1 px solid black;
+padding: 5 px;
+color: #FFFFFF;
+font: bold;
+}
+QPushButton:Pressed{
+background-color: #203354;
+border: 1 px solid gray;
+padding: 5 px;
+color: #FFFFFF;
+font: bold;
+}</string>
+    </property>
     <property name="text">
      <string>Play</string>
     </property>
@@ -148,6 +164,22 @@ font-weight: bold;</string>
       <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+background-color: #23395d;
+border: 1 px solid black;
+padding: 5 px;
+color: #FFFFFF;
+font: bold;
+}
+QPushButton:Pressed{
+background-color: #203354;
+border: 1 px solid gray;
+padding: 5 px;
+color: #FFFFFF;
+font: bold;
+}</string>
     </property>
     <property name="text">
      <string>Score</string>

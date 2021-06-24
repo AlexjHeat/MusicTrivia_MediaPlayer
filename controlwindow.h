@@ -10,6 +10,8 @@
 
 #include "playlist.h"
 #include "displaywindow.h"
+#include "playersdialog.h"
+#include "player.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ControlWindow; }
@@ -40,7 +42,11 @@ private slots:
 
     void buttonPlay();
     void countdown();
-    void setVolume(int);
+
+    void on_actionNew_Game_triggered();
+
+public slots:
+    void newGameUpdate();
 
 private:
     Ui::ControlWindow *ui;
@@ -52,7 +58,10 @@ private:
     QTimer* timer;
     int guessTime;
     bool countdownPause;
-
     bool currentlyPlaying;
+
+    PlayersDialog* newGameMenu;
+    Player playerList[MAX_PLAYER_SIZE];
+    int playerCount;
 };
 #endif // CONTROLWINDOW_H

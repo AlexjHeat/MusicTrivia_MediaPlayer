@@ -15,6 +15,8 @@ ControlWindow::ControlWindow(QWidget *parent)
     , currentlyPlaying(false)
 {
     ui->setupUi(this);
+    active = new Playlist();
+    newGameMenu = new PlayersDialog(this);
 
     listModel = new QStringListModel(this);
     ui->playlistView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -40,7 +42,8 @@ ControlWindow::ControlWindow(QWidget *parent)
     connect(ui->lineEditGuessTime, SIGNAL(textEdited(QString)), this, SLOT(updateGuessTime(QString)));
     connect(ui->buttonPlay, SIGNAL(released()), this, SLOT(buttonPlay()));
     connect(timer, SIGNAL(timeout()), this, SLOT(countdown()));
-    connect(ui->sliderVolume, SIGNAL(valueChanged(int)), this, SLOT(setVolume(int)));
+    connect(ui->sliderVolume, SIGNAL(valueChanged(int)), display, SLOT(setVolume(int)));
+
 }
 
 
@@ -52,7 +55,7 @@ ControlWindow::~ControlWindow()
 void ControlWindow::on_actionLoad_triggered()
 {
 
-    if (active != NULL && active->getChanged())
+    if (active->getChanged())
     {
         QMessageBox::StandardButton save = QMessageBox::warning(this, "Unsaved Changes",
                                                                 "You have unsaved changes to this playlist, would you like to save them?",
@@ -72,30 +75,25 @@ void ControlWindow::on_actionLoad_triggered()
         return;
     }
 
-    if (active != NULL)
-        delete active;
+    delete active;
     active = new Playlist();
     active->load(file);
     listModel->setStringList(active->getList());
     ui->playlistView->setModel(listModel);
+    ui->labelActivePlaylist->setText("Active Playlist: " + active->getName());
     file.close();
 }
 
 
 void ControlWindow::on_actionSave_triggered()
 {
-    if(active == NULL)
-    {
-        QMessageBox::warning(this, "Error", "No active playlist to save");
-        return;
-    }
     active->save();
 }
 
 
 void ControlWindow::on_actionCreate_triggered()
 {
-    if (active != NULL && active->getChanged())
+    if (active->getChanged())
     {
         QMessageBox::StandardButton save = QMessageBox::warning(this, "Unsaved Changes",
                                                                 "You have unsaved changes to this playlist, would you like to save them?",
@@ -109,9 +107,8 @@ void ControlWindow::on_actionCreate_triggered()
     QString nameInput = QInputDialog::getText(this, "Create new playlist", "Enter a name for the new playlist", QLineEdit::Normal, "playlist_name", &ok);
     if (!ok)
         return;
-    if (active != NULL)
-        delete active;
 
+    delete active;
     active = new Playlist(nameInput);
     listModel->setStringList(active->getList());
     ui->playlistView->setModel(listModel);
@@ -119,11 +116,6 @@ void ControlWindow::on_actionCreate_triggered()
 
 void ControlWindow::on_actionAdd_triggered()
 {
-    if(active == NULL)
-     {
-         QMessageBox::warning(this, "Error", "No active playlist");
-         return;
-     }
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "Select a file", "C:\\Users\\Owner\\Music");
     for(int i = 0; i < fileNames.size(); i++)
     {
@@ -136,11 +128,6 @@ void ControlWindow::on_actionAdd_triggered()
 
 void ControlWindow::on_actionRemove_triggered()
 {
-    if(active == NULL)
-     {
-         QMessageBox::warning(this, "Error", "No active playlist");
-         return;
-     }
     active->remove(i);
     listModel->setStringList(active->getList());
     ui->playlistView->setModel(listModel);
@@ -149,11 +136,6 @@ void ControlWindow::on_actionRemove_triggered()
 
 void ControlWindow::on_actionSort_triggered()
 {
-    if (active == NULL)
-    {
-        QMessageBox::warning(this, "Error", "No active playlist");
-        return;
-    }
     active->sort();
     listModel->setStringList(active->getList());
     ui->playlistView->setModel(listModel);
@@ -166,6 +148,7 @@ void ControlWindow::on_actionRename_triggered()
     if (!ok)
         return;
     active->setName(nameInput);
+    ui->labelActivePlaylist->setText("Active Playlist: " + nameInput);
 }
 
 void ControlWindow::displaySongData(QModelIndex t)
@@ -203,6 +186,11 @@ void ControlWindow::updateStartTime(QString time)
 
 void ControlWindow::updateGuessTime(QString time)
 {
+    if (time.toInt() < 5)
+    {
+        guessTime = 5;
+        ui->lineEditGuessTime->setText(QString::number(5));
+    }
     guessTime = time.toInt();
 }
 
@@ -226,15 +214,40 @@ void ControlWindow::buttonPlay()
         display->clockDisplay(guessTime);
         ui->clock->display(guessTime);
         ui->buttonPlay->setText("Stop");
+        QString buttonStyle = "QPushButton{"
+                              "background-color: #A1051D;"
+                              "color: #FFFFFF;"
+                              "border: 1 px solid gray;"
+                              "padding: 5 px;"
+                              "}"
+                              "QPushButton:pressed{"
+                              "background-color: #820006;"
+                              "color: #FFFFFF;"
+                              "border: 1 px solid gray;"
+                              "padding: 5 px;"
+                              "}";
+        ui->buttonPlay->setStyleSheet(buttonStyle);
         ui->labelCurrent->setText("Currently playing: " + active->getList()[i]);
-    }
-
+}
     else
     {
        display->stop();
        currentlyPlaying = false;
        timer->stop();
        ui->buttonPlay->setText("Play");
+       QString buttonStyle = "QPushButton{"
+                             "background-color: #23359D;"
+                             "color: #FFFFFF;"
+                             "border: 1 px solid gray;"
+                             "padding: 5 px;"
+                             "}"
+                             "QPushButton:pressed{"
+                             "background-color: #203354;"
+                             "color: #FFFFFF;"
+                             "border: 1 px solid gray;"
+                             "padding: 5 px;"
+                             "}";
+       ui->buttonPlay->setStyleSheet(buttonStyle);
     }
 }
 
@@ -257,7 +270,23 @@ void ControlWindow::countdown()
     }
 }
 
-void ControlWindow::setVolume(int n)
+void ControlWindow::on_actionNew_Game_triggered()
 {
-    display->setVolume(n);
+    delete newGameMenu;
+    newGameMenu = new PlayersDialog;
+    connect(newGameMenu, SIGNAL(accepted()), this, SLOT(newGameUpdate()));
+    newGameMenu->exec();
+}
+
+void ControlWindow::newGameUpdate()
+{
+    QStringList tempList = newGameMenu->getPlayerList();
+    int playerCount = newGameMenu->getPlayerCount();
+    for(int i = 0; i < playerCount; i++)
+    {
+        playerList[i].setName(tempList[i]);
+        playerList[i].setScore(0);
+        playerCount = newGameMenu->getPlayerCount();
+    }
+    display->setScoreboard(playerList, playerCount);
 }

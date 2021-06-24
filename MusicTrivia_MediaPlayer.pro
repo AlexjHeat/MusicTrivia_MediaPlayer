@@ -19,18 +19,23 @@ SOURCES += \
     displaywindow.cpp \
     main.cpp \
     controlwindow.cpp \
+    player.cpp \
+    playersdialog.cpp \
     playlist.cpp \
     song.cpp
 
 HEADERS += \
     controlwindow.h \
     displaywindow.h \
+    player.h \
+    playersdialog.h \
     playlist.h \
     song.h
 
 FORMS += \
     controlwindow.ui \
-    displaywindow.ui
+    displaywindow.ui \
+    playersdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
