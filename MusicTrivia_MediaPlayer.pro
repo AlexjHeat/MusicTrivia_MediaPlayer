@@ -22,6 +22,7 @@ SOURCES += \
     player.cpp \
     playersdialog.cpp \
     playlist.cpp \
+    scoredialog.cpp \
     song.cpp
 
 HEADERS += \
@@ -30,12 +31,14 @@ HEADERS += \
     player.h \
     playersdialog.h \
     playlist.h \
+    scoredialog.h \
     song.h
 
 FORMS += \
     controlwindow.ui \
     displaywindow.ui \
-    playersdialog.ui
+    playersdialog.ui \
+    scoredialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -12,6 +12,7 @@
 #include "displaywindow.h"
 #include "playersdialog.h"
 #include "player.h"
+#include "scoredialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ControlWindow; }
@@ -45,8 +46,11 @@ private slots:
 
     void on_actionNew_Game_triggered();
 
+    void on_buttonScore_released();
+
 public slots:
     void newGameUpdate();
+    void scoreUpdate();
 
 private:
     Ui::ControlWindow *ui;
@@ -63,5 +67,7 @@ private:
     PlayersDialog* newGameMenu;
     Player playerList[MAX_PLAYER_SIZE];
     int playerCount;
+
+    scoreDialog* scoreMenu;
 };
 #endif // CONTROLWINDOW_H

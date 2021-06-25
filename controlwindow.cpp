@@ -17,6 +17,7 @@ ControlWindow::ControlWindow(QWidget *parent)
     ui->setupUi(this);
     active = new Playlist();
     newGameMenu = new PlayersDialog(this);
+    scoreMenu = new scoreDialog(this);
 
     listModel = new QStringListModel(this);
     ui->playlistView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -281,12 +282,38 @@ void ControlWindow::on_actionNew_Game_triggered()
 void ControlWindow::newGameUpdate()
 {
     QStringList tempList = newGameMenu->getPlayerList();
-    int playerCount = newGameMenu->getPlayerCount();
+    playerCount = newGameMenu->getPlayerCount();
     for(int i = 0; i < playerCount; i++)
     {
         playerList[i].setName(tempList[i]);
         playerList[i].setScore(0);
         playerCount = newGameMenu->getPlayerCount();
+    }
+    display->setScoreboard(playerList, playerCount);
+}
+
+void ControlWindow::on_buttonScore_released()
+{
+    delete scoreMenu;
+    scoreMenu = new scoreDialog;
+    QStringList tempList;
+    for(int i = 0; i < playerCount; i++)
+    {
+        tempList.append(playerList[i].getName());
+    }
+    scoreMenu->setPlayerList(tempList);
+    scoreMenu->updateLayout();
+    connect(scoreMenu, SIGNAL(accepted()), this, SLOT(scoreUpdate()));
+    scoreMenu->exec();
+
+}
+
+void ControlWindow::scoreUpdate()
+{
+    std::vector<int> scores = scoreMenu->getScore();
+    for(int i = 0; i < playerCount; i++)
+    {
+        playerList[i].setScore(playerList[i].getScore() + scores[i]);
     }
     display->setScoreboard(playerList, playerCount);
 }

@@ -65,14 +65,14 @@ void DisplayWindow::setScoreboard(Player* playerList, int playerCount)
     {
         arr[i] = new QLabel;
         QString spacing = ":\t";
-        if (playerList[i].getName().length() <= 8)
+        if (playerList[i].getName().length() <= 9)
             spacing += "\t";
 
         arr[i]->setText(playerList[i].getName() + spacing + QString::number(playerList[i].getScore()));
 
         int column = i%4;
         int row = i/4;
-
+        arr[i]->setStyleSheet("font: open sans; font-size: 13px; font-weight: bold;");
         ui->scoreboardLayout->addWidget(arr[i], row, column);
     }
 }
