@@ -21,12 +21,15 @@ public:
     explicit DisplayWindow(QWidget *parent = nullptr);
     ~DisplayWindow();
     void play(QString fileName, int startTime);
+    void resume();
+    void pause();
     void stop();
 
     void revealVideo();
     void hideVideo();
-    void clockDisplay(int);
+    void setClock(int);
     void setScoreboard(Player*, int);
+    void setRevealLabel(QString);
 
 public slots:
     void setVolume(int);

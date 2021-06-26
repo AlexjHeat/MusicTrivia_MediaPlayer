@@ -24,9 +24,21 @@ void DisplayWindow::play(QString fileName, int startTime)
     mediaPlayer->play();
 }
 
+void DisplayWindow::resume()
+{
+    mediaPlayer->play();
+}
+
+void DisplayWindow::pause()
+{
+    mediaPlayer->pause();
+}
+
 void DisplayWindow::stop()
 {
     mediaPlayer->stop();
+    ui->revealLabel->setText("");
+    this->hideVideo();
 }
 
 void DisplayWindow::setVolume(int v)
@@ -38,14 +50,16 @@ void DisplayWindow::setVolume(int v)
 void DisplayWindow::revealVideo()
 {
    ui->VideoOutput->show();
+   ui->clock->hide();
 }
 
 void DisplayWindow::hideVideo()
 {
     ui->VideoOutput->hide();
+    ui->clock->show();
 }
 
-void DisplayWindow::clockDisplay(int n)
+void DisplayWindow::setClock(int n)
 {
     ui->clock->display(n);
 }
@@ -75,4 +89,9 @@ void DisplayWindow::setScoreboard(Player* playerList, int playerCount)
         arr[i]->setStyleSheet("font: open sans; font-size: 13px; font-weight: bold;");
         ui->scoreboardLayout->addWidget(arr[i], row, column);
     }
+}
+
+void DisplayWindow::setRevealLabel(QString text)
+{
+    ui->revealLabel->setText(text);
 }

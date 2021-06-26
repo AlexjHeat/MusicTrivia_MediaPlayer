@@ -12,7 +12,7 @@ ControlWindow::ControlWindow(QWidget *parent)
     , ui(new Ui::ControlWindow)
     , active(NULL)
     , i(0)
-    , currentlyPlaying(false)
+    , state(stopped)
 {
     ui->setupUi(this);
     active = new Playlist();
@@ -187,12 +187,12 @@ void ControlWindow::updateStartTime(QString time)
 
 void ControlWindow::updateGuessTime(QString time)
 {
-    if (time.toInt() < 5)
-    {
-        guessTime = 5;
-        ui->lineEditGuessTime->setText(QString::number(5));
-    }
     guessTime = time.toInt();
+    if (time.toInt() < 1)
+    {
+        guessTime = 1;
+        ui->lineEditGuessTime->setText(QString::number(1));
+    }
 }
 
 void ControlWindow::buttonPlay()
@@ -203,18 +203,18 @@ void ControlWindow::buttonPlay()
         return;
     }
 
-    if(!currentlyPlaying)
+    if(state == stopped)
     {
-        Song current = active->getSong(i);
+        current = active->getSong(i);
         display->play(current.getPath(), current.getStartTime());
         display->hideVideo();
-        currentlyPlaying = true;
+        state = playing;
         current.setPlayed(true);
 
         timer->start(1000);
-        display->clockDisplay(guessTime);
+        display->setClock(guessTime);
         ui->clock->display(guessTime);
-        ui->buttonPlay->setText("Stop");
+        ui->buttonPlay->setText("Pause");
         QString buttonStyle = "QPushButton{"
                               "background-color: #A1051D;"
                               "color: #FFFFFF;"
@@ -230,10 +230,10 @@ void ControlWindow::buttonPlay()
         ui->buttonPlay->setStyleSheet(buttonStyle);
         ui->labelCurrent->setText("Currently playing: " + active->getList()[i]);
 }
-    else
+    else if (state == playing)
     {
-       display->stop();
-       currentlyPlaying = false;
+       display->pause();
+       state = paused;
        timer->stop();
        ui->buttonPlay->setText("Play");
        QString buttonStyle = "QPushButton{"
@@ -250,23 +250,67 @@ void ControlWindow::buttonPlay()
                              "}";
        ui->buttonPlay->setStyleSheet(buttonStyle);
     }
+    else if (state == paused)
+    {
+        display->resume();
+        state = playing;
+        if (ui->clock->intValue() != 0)
+        {
+            timer->start();
+        }
+        else
+        {
+            display->revealVideo();
+            display->setRevealLabel(current.getArtist() + " - " + current.getTitle());
+        }
+        ui->buttonPlay->setText("Pause");
+        QString buttonStyle = "QPushButton{"
+                              "background-color: #A1051D;"
+                              "color: #FFFFFF;"
+                              "border: 1 px solid gray;"
+                              "padding: 5 px;"
+                              "}"
+                              "QPushButton:pressed{"
+                              "background-color: #820006;"
+                              "color: #FFFFFF;"
+                              "border: 1 px solid gray;"
+                              "padding: 5 px;"
+                              "}";
+        ui->buttonPlay->setStyleSheet(buttonStyle);
+    }
 }
 
 void ControlWindow::countdown()
 {
     int n = ui->clock->intValue() - 1;
     ui->clock->display(n);
-    display->clockDisplay(n);
+    display->setClock(n);
     if (n == 0)
     {
         timer->stop();
         if (ui->checkBox->checkState())
         {
-            display->stop();
+            display->pause();
+            state = paused;
+            ui->buttonPlay->setText("Play");
+            QString buttonStyle = "QPushButton{"
+                                  "background-color: #23359D;"
+                                  "color: #FFFFFF;"
+                                  "border: 1 px solid gray;"
+                                  "padding: 5 px;"
+                                  "}"
+                                  "QPushButton:pressed{"
+                                  "background-color: #203354;"
+                                  "color: #FFFFFF;"
+                                  "border: 1 px solid gray;"
+                                  "padding: 5 px;"
+                                  "}";
+            ui->buttonPlay->setStyleSheet(buttonStyle);
         }
         else
         {
             display->revealVideo();
+            display->setRevealLabel(current.getArtist() + " - " + current.getTitle());
         }
     }
 }
@@ -294,6 +338,11 @@ void ControlWindow::newGameUpdate()
 
 void ControlWindow::on_buttonScore_released()
 {
+    if (playerList[0].getName().isEmpty())
+    {
+        QMessageBox::warning(this, "Error", "No game running.");
+        return;
+    }
     delete scoreMenu;
     scoreMenu = new scoreDialog;
     QStringList tempList;
@@ -305,8 +354,29 @@ void ControlWindow::on_buttonScore_released()
     scoreMenu->updateLayout();
     connect(scoreMenu, SIGNAL(accepted()), this, SLOT(scoreUpdate()));
     scoreMenu->exec();
-
 }
+
+void ControlWindow::on_buttonStop_released()
+{
+    display->stop();
+    state = stopped;
+    timer->stop();
+    ui->buttonPlay->setText("Play");
+    QString buttonStyle = "QPushButton{"
+                          "background-color: #23359D;"
+                          "color: #FFFFFF;"
+                          "border: 1 px solid gray;"
+                          "padding: 5 px;"
+                          "}"
+                          "QPushButton:pressed{"
+                          "background-color: #203354;"
+                          "color: #FFFFFF;"
+                          "border: 1 px solid gray;"
+                          "padding: 5 px;"
+                          "}";
+    ui->buttonPlay->setStyleSheet(buttonStyle);
+}
+
 
 void ControlWindow::scoreUpdate()
 {
@@ -316,4 +386,6 @@ void ControlWindow::scoreUpdate()
         playerList[i].setScore(playerList[i].getScore() + scores[i]);
     }
     display->setScoreboard(playerList, playerCount);
+    this->on_buttonStop_released();
 }
+

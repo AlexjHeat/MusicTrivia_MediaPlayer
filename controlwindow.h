@@ -18,6 +18,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class ControlWindow; }
 QT_END_NAMESPACE
 
+enum songState{playing, paused, stopped};
+
 class ControlWindow : public QMainWindow
 {
     Q_OBJECT
@@ -47,6 +49,7 @@ private slots:
     void on_actionNew_Game_triggered();
 
     void on_buttonScore_released();
+    void on_buttonStop_released();
 
 public slots:
     void newGameUpdate();
@@ -58,11 +61,13 @@ private:
     Playlist *active;
     QStringListModel* listModel;
     int i;
+    Song current;
 
     QTimer* timer;
     int guessTime;
-    bool countdownPause;
-    bool currentlyPlaying;
+
+
+    songState state;
 
     PlayersDialog* newGameMenu;
     Player playerList[MAX_PLAYER_SIZE];
