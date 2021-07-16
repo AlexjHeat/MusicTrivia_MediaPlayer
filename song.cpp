@@ -20,60 +20,20 @@ void Song::setPlayed(bool played) {this->played = played; }
 
 bool Song::operator<(const Song& other)
 {
-    bool result{false};
-    bool titleCheck{false};
-
-    if(this->getArtist().isEmpty())
-    {
-        if (other.getArtist().isEmpty())
-            titleCheck = true;
-    }
-    else if(other.getArtist().isEmpty())
-            result = true;
-
-    else if(this->getArtist().compare(other.getArtist()) < 0)
-        result = true;
-
-    else
-        titleCheck = true;
-
-    if (titleCheck)
-    {
-        if(other.getTitle().isEmpty())
-            result = true;
-        else if(this->getArtist().compare(other.getArtist()) < 0)
-            result = true;
-    }
-    return result;
+    QString song1 = this->getArtist() + this->getTitle();
+    QString song2 = other.getArtist() + other.getTitle();
+    if(song1.compare(song2) < 0)
+        return true;
+    return false;
 }
 
 bool Song::operator>(const Song& other)
 {
-    bool result{false};
-    bool titleCheck{false};
-
-    if(!this->getArtist().isEmpty())
-    {
-        if (!other.getArtist().isEmpty())
-            titleCheck = true;
-    }
-    else if(!other.getArtist().isEmpty())
-            result = true;
-
-    else if(this->getArtist().compare(other.getArtist()) > 0)
-        result = true;
-
-    else
-        titleCheck = true;
-
-    if (titleCheck)
-    {
-        if(!other.getTitle().isEmpty())
-            result = true;
-        else if(this->getArtist().compare(other.getArtist()) > 0)
-            result = true;
-    }
-    return result;
+    QString song1 = this->getArtist() + this->getTitle();
+    QString song2 = other.getArtist() + other.getTitle();
+    if(song1.compare(song2) > 0)
+        return true;
+    return false;
 }
 
 bool Song::operator==(const Song& other)

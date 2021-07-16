@@ -54,19 +54,22 @@
    <widget class="QLabel" name="revealLabel">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>350</x>
       <y>40</y>
-      <width>761</width>
-      <height>31</height>
+      <width>1211</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">font: open sans;
-font-size: 20px;
+font-size: 28px;
 font-weight: bold;</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

@@ -310,7 +310,12 @@ void ControlWindow::countdown()
         else
         {
             display->revealVideo();
-            display->setRevealLabel(current.getArtist() + " - " + current.getTitle());
+            QString revealLabel = current.getArtist() + " - " + current.getTitle();
+            if(current.getTitle().isEmpty())
+                revealLabel = current.getArtist();
+            if(current.getArtist().isEmpty())
+                revealLabel = current.getTitle();
+            display->setRevealLabel(revealLabel);
         }
     }
 }

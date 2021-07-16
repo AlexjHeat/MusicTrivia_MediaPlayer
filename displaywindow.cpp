@@ -7,8 +7,9 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    mediaPlayer = new QMediaPlayer(this);
-    mediaPlayer->setVideoOutput(ui->VideoOutput);
+
+
+    //Last ditch plan if I can't find another solution.  Destroy mediaPlayer everytime a song is stopped.  Create new mediaPlayer object when song is played.  Set video output in revealVideo()
 
 }
 
@@ -19,6 +20,7 @@ DisplayWindow::~DisplayWindow()
 
 void DisplayWindow::play(QString fileName, int startTime)
 {
+    mediaPlayer = new QMediaPlayer(this);
     mediaPlayer->setMedia(QUrl::fromLocalFile(fileName));
     mediaPlayer->setPosition(startTime * 1000);
     mediaPlayer->play();
@@ -36,7 +38,7 @@ void DisplayWindow::pause()
 
 void DisplayWindow::stop()
 {
-    mediaPlayer->stop();
+    delete mediaPlayer;
     ui->revealLabel->setText("");
     this->hideVideo();
 }
@@ -49,6 +51,7 @@ void DisplayWindow::setVolume(int v)
 
 void DisplayWindow::revealVideo()
 {
+   mediaPlayer->setVideoOutput(ui->VideoOutput);
    ui->VideoOutput->show();
    ui->clock->hide();
 }

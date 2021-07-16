@@ -9,18 +9,15 @@ void swap(Song* a, Song* b)
 
 int partition (Song arr[], int low, int high)
 {
-    int mid = (low + high) / 2 + low;
-    Song pivot = arr[mid];
-    swap(&arr[mid], &arr[high]);
+    Song pivot = arr[high];
     int i = low - 1;
-    for(int j = low; j <= high - 1; j++)
+    for(int j = low; j < high; j++)
     {
         if(arr[j] < pivot)
         {
             i++;
             swap(&arr[i], &arr[j]);
         }
-
     }
     swap(&arr[i + 1], &arr[high]);
         return (i + 1);
