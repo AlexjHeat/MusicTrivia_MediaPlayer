@@ -393,4 +393,3 @@ void ControlWindow::scoreUpdate()
     display->setScoreboard(playerList, playerCount);
     this->on_buttonStop_released();
 }
-

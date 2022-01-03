@@ -5,6 +5,7 @@
 #include <QMediaPlayer>
 #include <QVideoWidget>
 #include <QLabel>
+#include <QTimer>
 #include "song.h"
 #include "player.h"
 
@@ -33,6 +34,8 @@ public:
 
 public slots:
     void setVolume(int);
+    void volumeUp();
+    void volumeDown();
 
 private:
     Ui::DisplayWindow *ui;
@@ -40,7 +43,10 @@ private:
     Song currentlyPlaying;
     int volume;
     int playerCount;
-    QLabel** arr;
+    QLabel** arrName;
+    QLabel** arrScore;
+    QTimer* volUpTimer;
+    QTimer* volDownTimer;
 
 
 };

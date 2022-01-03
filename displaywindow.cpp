@@ -7,9 +7,21 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    mediaPlayer = new QMediaPlayer(this);
+    mediaPlayer->setVideoOutput(ui->VideoOutput);
+    // Last ditch plan if I can't find another solution. Destroy mediaPlayer everytime a song is stopped.  Create new mediaPlayer object when song is played.  Set video output in revealVideo()
+        // Create new media player at this->play()
+        // Set Video Output at this->revealVideo()
+        // Destroy media player at this->hideVideo()
 
+    volUpTimer = new QTimer;
+    volDownTimer = new QTimer;
 
-    //Last ditch plan if I can't find another solution.  Destroy mediaPlayer everytime a song is stopped.  Create new mediaPlayer object when song is played.  Set video output in revealVideo()
+    connect(volUpTimer, SIGNAL(timeout()), this, SLOT(volumeUp()));
+    connect(volDownTimer, SIGNAL(timeout()), this, SLOT(volumeDown()));
+
+    arrName = new QLabel*[12];
+    arrScore = new QLabel*[12];
 
 }
 
@@ -20,46 +32,57 @@ DisplayWindow::~DisplayWindow()
 
 void DisplayWindow::play(QString fileName, int startTime)
 {
-    mediaPlayer = new QMediaPlayer(this);
+
     mediaPlayer->setMedia(QUrl::fromLocalFile(fileName));
     mediaPlayer->setPosition(startTime * 1000);
+
     mediaPlayer->play();
+    volUpTimer->start(7);
+    mediaPlayer->setVolume(0);
+    volDownTimer->stop();
+
 }
 
 void DisplayWindow::resume()
 {
     mediaPlayer->play();
+    volUpTimer->start(7);
+    mediaPlayer->setVolume(0);
+    volDownTimer->stop();
 }
 
 void DisplayWindow::pause()
 {
-    mediaPlayer->pause();
+    volUpTimer->stop();
+    volDownTimer->start(7);
 }
 
 void DisplayWindow::stop()
 {
-    delete mediaPlayer;
-    ui->revealLabel->setText("");
+    volUpTimer->stop();
+    volDownTimer->start(7);
     this->hideVideo();
 }
 
 void DisplayWindow::setVolume(int v)
 {
     volume = v;
-    mediaPlayer->setVolume(v);
+    mediaPlayer->setVolume(volume);
 }
 
 void DisplayWindow::revealVideo()
 {
-   mediaPlayer->setVideoOutput(ui->VideoOutput);
    ui->VideoOutput->show();
    ui->clock->hide();
+   ui->revealLabel->setText(this->currentlyPlaying.getTitle());
+
 }
 
 void DisplayWindow::hideVideo()
 {
     ui->VideoOutput->hide();
     ui->clock->show();
+    ui->revealLabel->setText("");
 }
 
 void DisplayWindow::setClock(int n)
@@ -69,23 +92,53 @@ void DisplayWindow::setClock(int n)
 
 void DisplayWindow::setScoreboard(Player* playerList, int playerCount)
 {
-    int count = ui->scoreboardLayout->count();
-    for(int i = 0; i < count; i++)
-    {
-        ui->scoreboardLayout->removeWidget(arr[i]);
-        delete arr[i];
-    }
-    delete arr;
+    int count = ui->scoreLayout->count();
 
-    arr = new QLabel*[playerCount];
+    if(arrName != NULL)
+    {
+        for(int i = 0; i < count; i++)
+        {
+            ui->nameLayout->removeWidget(arrName[i]);
+            ui->scoreLayout->removeWidget(arrScore[i]);
+            delete arrName[i];
+            delete arrScore[i];
+        }
+    }
+
+
     for(int i = 0; i < playerCount; i++)
     {
-        arr[i] = new QLabel;
+        arrName[i] = new QLabel;
+        arrScore[i] = new QLabel;
 
-        arr[i]->setText(playerList[i].getName() + ":\t\t" + QString::number(playerList[i].getScore()));
+        arrName[i]->setText(playerList[i].getName());
+        arrScore[i]->setText(QString::number(playerList[i].getScore()));
 
-        arr[i]->setStyleSheet("font: open sans; font-size: 13px; font-weight: bold;");
-        ui->scoreboardLayout->addWidget(arr[i]);
+        arrName[i]->setStyleSheet("font: open sans; font-size: 24px; font-weight: bold;");
+        arrScore[i]->setStyleSheet("font: open sans; font-size: 24px; font-weight: bold;");
+        ui->nameLayout->addWidget(arrName[i]);
+        ui->scoreLayout->addWidget(arrScore[i]);
+    }
+}
+
+void DisplayWindow::volumeUp()
+{
+    int currentVolume = mediaPlayer->volume();
+    if(currentVolume < volume)
+        mediaPlayer->setVolume(currentVolume + 1);
+    else
+        volUpTimer->stop();
+}
+
+void DisplayWindow::volumeDown()
+{
+    int currentVolume = mediaPlayer->volume();
+    if(currentVolume > 0)
+        mediaPlayer->setVolume(currentVolume - 1);
+    else
+    {
+        mediaPlayer->pause();
+        volDownTimer->stop();
     }
 }
 
