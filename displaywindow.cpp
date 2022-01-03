@@ -75,22 +75,17 @@ void DisplayWindow::setScoreboard(Player* playerList, int playerCount)
         ui->scoreboardLayout->removeWidget(arr[i]);
         delete arr[i];
     }
-
     delete arr;
+
     arr = new QLabel*[playerCount];
     for(int i = 0; i < playerCount; i++)
     {
         arr[i] = new QLabel;
-        QString spacing = ":\t";
-        if (playerList[i].getName().length() <= 9)
-            spacing += "\t";
 
-        arr[i]->setText(playerList[i].getName() + spacing + QString::number(playerList[i].getScore()));
+        arr[i]->setText(playerList[i].getName() + ":\t\t" + QString::number(playerList[i].getScore()));
 
-        int column = i%4;
-        int row = i/4;
         arr[i]->setStyleSheet("font: open sans; font-size: 13px; font-weight: bold;");
-        ui->scoreboardLayout->addWidget(arr[i], row, column);
+        ui->scoreboardLayout->addWidget(arr[i]);
     }
 }
 
