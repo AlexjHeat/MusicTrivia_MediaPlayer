@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow{
-background-color: #fefefe;
+background-color: #df6e28;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -39,7 +39,9 @@ background-color: #fefefe;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QLCDNumber{
+background-color: #f9f4ef;
+}</string>
     </property>
     <property name="digitCount">
      <number>2</number>
@@ -56,7 +58,8 @@ background-color: #fefefe;
     </property>
     <property name="styleSheet">
      <string notr="true">font: open sans;
-font-size: 28px;
+font-size: 42px;
+font-color: #f9f4ef;
 font-weight: bold;</string>
     </property>
     <property name="text">
@@ -70,26 +73,26 @@ font-weight: bold;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>810</y>
+      <y>800</y>
       <width>1921</width>
-      <height>271</height>
+      <height>251</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/img/test.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/img/banner_bot.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_right">
     <property name="geometry">
      <rect>
-      <x>1580</x>
-      <y>100</y>
-      <width>341</width>
-      <height>711</height>
+      <x>1560</x>
+      <y>60</y>
+      <width>361</width>
+      <height>741</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/img/img/banner_right2.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">

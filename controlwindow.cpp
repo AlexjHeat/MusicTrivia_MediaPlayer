@@ -35,6 +35,9 @@ ControlWindow::ControlWindow(QWidget *parent)
     ui->sliderVolume->setRange(0, 100);
     ui->sliderVolume->setValue(100);
 
+    ui->clock->display(guessTime);
+    display->setClock(guessTime);
+
 
     connect(ui->playlistView, SIGNAL(clicked(QModelIndex)), this, SLOT(displaySongData(QModelIndex)));
     connect(ui->lineEditArtist, SIGNAL(textEdited(QString)), this, SLOT(updateArtist(QString)));
@@ -310,7 +313,7 @@ void ControlWindow::countdown()
         else
         {
             display->revealVideo();
-            QString revealLabel = current.getArtist() + " - " + current.getTitle();
+            QString revealLabel = current.getArtist();
             if(current.getTitle().isEmpty())
                 revealLabel = current.getArtist();
             if(current.getArtist().isEmpty())
@@ -359,6 +362,9 @@ void ControlWindow::on_buttonScore_released()
     scoreMenu->updateLayout();
     connect(scoreMenu, SIGNAL(accepted()), this, SLOT(scoreUpdate()));
     scoreMenu->exec();
+
+    ui->clock->display(guessTime);
+    display->setClock(guessTime);
 }
 
 void ControlWindow::on_buttonStop_released()
@@ -380,6 +386,9 @@ void ControlWindow::on_buttonStop_released()
                           "padding: 5 px;"
                           "}";
     ui->buttonPlay->setStyleSheet(buttonStyle);
+
+    ui->clock->display(guessTime);
+    display->setClock(guessTime);
 }
 
 

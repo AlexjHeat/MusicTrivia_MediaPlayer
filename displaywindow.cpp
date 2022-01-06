@@ -114,8 +114,8 @@ void DisplayWindow::setScoreboard(Player* playerList, int playerCount)
         arrName[i]->setText(playerList[i].getName());
         arrScore[i]->setText(QString::number(playerList[i].getScore()));
 
-        arrName[i]->setStyleSheet("font: open sans; font-size: 24px; font-weight: bold;");
-        arrScore[i]->setStyleSheet("font: open sans; font-size: 24px; font-weight: bold;");
+        arrName[i]->setStyleSheet("font: open sans; font-size: 24px; font-color: #f9f4ef; font-weight: bold;");
+        arrScore[i]->setStyleSheet("font: open sans; font-size: 24px; font-color: #f9f4ef; font-weight: bold;");
         ui->nameLayout->addWidget(arrName[i]);
         ui->scoreLayout->addWidget(arrScore[i]);
     }
